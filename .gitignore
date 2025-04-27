@@ -1,0 +1,16 @@
+# Java / Maven standard
+target/
+*.class
+*.log
+
+# VSCode
+.vscode/
+.settings/
+.idea/
+
+# OS-filer
+.DS_Store
+Thumbs.db
+
+# Maven / IntelliJ
+*.iml
