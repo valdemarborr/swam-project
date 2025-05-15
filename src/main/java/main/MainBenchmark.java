@@ -15,6 +15,7 @@ public class MainBenchmark {
         EntityManagerFactory emf = new EntityManagerProducer().produceEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
 
+        // Setup DAOs with current EntityManager
         UserDAO userDAO = new UserDAO();
         StoreOrderDAO storeOrderDAO = new StoreOrderDAO();
         ItemDAO itemDAO = new ItemDAO();
@@ -22,24 +23,24 @@ public class MainBenchmark {
         storeOrderDAO.entityManager = em;
         itemDAO.entityManager = em;
 
+        // Populate database: 100 users × 2 orders each
         em.getTransaction().begin();
 
-        // Lag en Item som alle bestiller
         Item commonItem = new Item();
         commonItem.setName("MagicMouse");
         commonItem.setPrice(59.99);
         itemDAO.save(commonItem);
 
-        // Bulk insert: 100 brukere med 2 bestillinger hver
-        List<User> users = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
             User user = new User();
             user.setName("User_" + i);
+
             Address address = new Address();
             address.setCity("City_" + i);
             address.setStreet("Street_" + i);
             address.setZipcode("ZIP_" + i);
             user.setAddress(address);
+
             userDAO.save(user);
 
             for (int j = 0; j < 2; j++) {
@@ -49,28 +50,35 @@ public class MainBenchmark {
                 order.setItem(commonItem);
                 storeOrderDAO.save(order);
             }
-            users.add(user);
         }
 
         em.getTransaction().commit();
 
-        // Benchmarking starts here
-        System.out.println("\n--- Benchmark Fetching Users and their Orders ---");
+        // Clear persistence context to force fresh SQL fetches
+        em.clear();
+
+        System.out.println("\n--- Benchmark: Fetching Users and their Orders ---");
 
         long start = System.currentTimeMillis();
-        List<User> fetchedUsers = userDAO.findAll(); // Fetch Users (Orders lazy-loaded)
+
+        // Fetch users from DB
+        // List<User> fetchedUsers = userDAO.findAllWithOrders(); // Eager
+        List<User> fetchedUsers = userDAO.findAll(); // Lazy
+
+
+        // Trigger order fetching (only matters with LAZY)
         for (User u : fetchedUsers) {
-            // Force loading orders
             if (u.getStoreOrders() != null) {
-                u.getStoreOrders().size(); // Trigger lazy load
+                u.getStoreOrders().size(); // Forces lazy loading if applicable
             }
         }
+
         long end = System.currentTimeMillis();
 
-        System.out.println("Tid brukt på å hente 100 Users + Orders: " + (end - start) + " ms");
+        System.out.println("Loaded users: " + fetchedUsers.size());
+        System.out.println("Time taken to fetch users + orders: " + (end - start) + " ms");
 
         em.close();
         emf.close();
     }
 }
-

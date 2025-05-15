@@ -15,11 +15,11 @@ public class User {
     @Embedded
     private Address address;
 
-    // @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<StoreOrder> storeOrders;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreOrder> storeOrders;
+
+    // @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    // private List<StoreOrder> storeOrders;
 
     // Getters and Setters
     public Long getId() { return id; }
