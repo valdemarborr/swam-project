@@ -11,7 +11,6 @@ public class ShoppingCartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Item item;
 
     @ManyToOne
     private User user;
@@ -53,13 +52,5 @@ public class ShoppingCartItem {
     public void setId(Long id) {
         this.id = id;
     }
-    public Item getItem() {
-        return item;
-    }
-    public void setItem(Item item) {
-        this.item = item;
-    }
-    
-
 
 }

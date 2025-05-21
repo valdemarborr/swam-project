@@ -19,7 +19,7 @@ public class StoreOrder {
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderLine> items;
+    private List<OrderLine> products;
 
     @Embedded
     private PaymentInfo paymentInfo;
@@ -44,11 +44,11 @@ public class StoreOrder {
     public void setUser(User user) {
         this.user = user;
     }
-    public List<OrderLine> getItem() {
-        return items;
+    public List<OrderLine> getProducts() {
+        return products;
     }
-    public void setItem(Item item) {
-        this.items = (List<OrderLine>) item;
+    public void setProducts(List<OrderLine> products) {
+        this.products = products;
     }
     public PaymentInfo getPaymentInfo() {
         return paymentInfo;
@@ -63,12 +63,5 @@ public class StoreOrder {
         OrderDetails = orderDetails;
     }
 
-    public List<OrderLine> getItems() {
-        return items;
-    }
-
-    public void setItems(List<OrderLine> items) {
-        this.items = items;
-    }
         
 }
