@@ -1,34 +1,47 @@
 package service;
 
-import dao.StoreOrderDAO;
-import dao.ItemDAO;
-import dao.UserDAO;
+import dao.*;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import model.Item;
-import model.StoreOrder;
-import model.User;
+import jakarta.transaction.Transactional;
+import model.*;
 
+import java.util.List;
 @RequestScoped
 public class OrderService {
     @Inject
-    private StoreOrderDAO storeOrderDAO;
+    StoreOrderDAO storeOrderDAO;
 
     @Inject
-    private UserDAO userDAO;
+    ShoppingCartItemDAO shoppingCartItemDAO;
 
     @Inject
-    private ItemDAO itemDAO;
+    UserDAO userDAO;
 
-    public void createOrder(Long userId, Long itemId, String orderDetails) {
+    @Transactional
+    public void checkout(Long userId, PaymentInfo paymentInfo) {
         User user = userDAO.findById(userId);
-        Item item = itemDAO.findById(itemId);
 
         StoreOrder order = new StoreOrder();
         order.setUser(user);
-        order.setItem(item);
-        order.setOrderDetails(orderDetails);
+        order.setStatus("CONFIRMED");
+        order.setPaymentInfo(paymentInfo);
+
+        List<ShoppingCartItem> cartItems = user.getCartItems();
+        for (ShoppingCartItem cartItem : cartItems) {
+            OrderLine line = new OrderLine();
+            line.setProduct(cartItem.getProduct());
+            line.setQuantity(cartItem.getQuantity());
+            line.setOrder(order);
+            order.getItems().add(line);
+            shoppingCartItemDAO.delete(cartItem);
+        }
 
         storeOrderDAO.save(order);
+    }
+
+    public List<StoreOrder> getOrdersByUser(Long userId) {
+        User user = userDAO.findById(userId);
+        return user.getOrders();
     }
 }
