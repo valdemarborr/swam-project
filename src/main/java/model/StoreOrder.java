@@ -24,5 +24,20 @@ public class StoreOrder {
     @Embedded
     private PaymentInfo paymentInfo;
 
+    public void setUser(User user2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setUser'");
+    }
+
+    public void setItem(Item item) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setItem'");
+    }
+
+    public void setOrderDetails(String string) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setOrderDetails'");
+    }
+
     // Getters and setters
 }

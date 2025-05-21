@@ -69,7 +69,7 @@ public class MainBenchmark {
         // Trigger order fetching (only matters with LAZY)
         for (User u : fetchedUsers) {
             if (u.getStoreOrders() != null) {
-                u.getStoreOrders().size(); // Forces lazy loading if applicable
+                ((List<User>) u.getStoreOrders()).size(); // Forces lazy loading if applicable
             }
         }
 

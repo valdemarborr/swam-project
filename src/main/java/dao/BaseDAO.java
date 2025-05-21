@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class BaseDAO<T> {
     @Inject
-    protected EntityManager entityManager;
+    public EntityManager entityManager;
 
     private final Class<T> entityClass;
 
