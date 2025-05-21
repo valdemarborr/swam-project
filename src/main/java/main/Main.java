@@ -6,53 +6,64 @@ import util.EntityManagerProducer;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.enterprise.inject.se.SeContainer;
-import jakarta.enterprise.inject.se.SeContainerInitializer;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 public class Main {
     public static void main(String[] args) {
-        // Manuelt for testing uten full server/CDI container
         EntityManagerFactory emf = new EntityManagerProducer().produceEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
 
-        // Sett opp DAOer
         UserDAO userDAO = new UserDAO();
         StoreOrderDAO storeOrderDAO = new StoreOrderDAO();
-        ItemDAO itemDAO = new ItemDAO();
+        ProductDAO productDAO = new ProductDAO();
 
         userDAO.entityManager = em;
         storeOrderDAO.entityManager = em;
-        itemDAO.entityManager = em;
+        productDAO.entityManager = em;
 
-        // Start transaksjon
         em.getTransaction().begin();
 
-        // Lag en Item
-        Item item = new Item();
-        item.setName("Laptop");
-        item.setPrice(999.99);
-        itemDAO.save(item);
+        Product product = new DigitalProduct();
+        product.setName("Laptop");
+        product.setPrice(new BigDecimal("999.99"));
+        productDAO.save(product);
 
-        // Lag en User
         User user = new User();
         user.setName("Valdemar");
         Address address = new Address();
         address.setCity("Firenze");
         address.setStreet("Via Roma");
-        address.setZipcode("50100");
+        address.setZipCode("50100");
         user.setAddress(address);
         userDAO.save(user);
+        em.flush();
 
-        // Lag en StoreOrder
+        for (int j = 0; j < 10000; j++) {
+            ShoppingCartItem item = new ShoppingCartItem();
+            item.setProduct(product);
+            item.setQuantity(1);
+            item.setUser(user);
+
+            em.persist(item);
+
+            // Flush og clear med jevne mellomrom for å unngå OutOfMemoryError
+            if (j % 100 == 0) {
+                em.flush();
+                em.clear();
+            }
+        }
+
+
         StoreOrder order = new StoreOrder();
         order.setUser(user);
-        order.setItem(item);
+        order.setProducts(List.of(new OrderLine(product, 1)));
         order.setOrderDetails("Express shipping");
         storeOrderDAO.save(order);
 
         em.getTransaction().commit();
 
-        // Hent og skriv ut
         System.out.println("User hentet: " + userDAO.findById(user.getId()).getName());
 
         em.close();
