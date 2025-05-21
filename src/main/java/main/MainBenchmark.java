@@ -4,12 +4,26 @@ import dao.*;
 import model.*;
 import util.EntityManagerProducer;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-
+import jakarta.persistence.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * MainBenchmark.java
+ *
+ * Benchmark-fokusert variant som oppretter 1 000 brukere, og gir hver av dem 10 ordrer,
+ * alle med samme DigitalProduct.
+ *
+ * Etter å ha lagt inn dataene, måler den tiden det tar å hente alle brukerne og
+ * aksessere relaterte data: brukerens ordrer (OneToMany), favorittprodukter (ManyToMany),
+ * og adresse (Embedded).
+ *
+ * Dette gjør det mulig å teste effekten av fetch-type (EAGER vs LAZY), og embedded versus
+ * relasjonsbasert data, samt hvorvidt @ManyToMany/OneToMany koster mye under lasting.
+ *
+ * Brukes for å benchmarke henteytelse og vurdere effektiviteten av mapping-konfigurasjonene.
+ */
+
 
 class MainBenchmark {
     public static void main(String[] args) {
@@ -26,12 +40,12 @@ class MainBenchmark {
 
         em.getTransaction().begin();
 
-        Product commonProduct = new DigitalProduct();
-        commonProduct.setName("Standard Product");
+        DigitalProduct commonProduct = new DigitalProduct();
+        commonProduct.setName("Standard Digital Product");
         commonProduct.setPrice(new BigDecimal("10.0"));
         productDAO.save(commonProduct);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             User user = new User();
             user.setName("User_" + i);
             Address address = new Address();
@@ -41,7 +55,7 @@ class MainBenchmark {
             user.setAddress(address);
             userDAO.save(user);
 
-            for (int j = 0; j < 2; j++) {
+            for (int j = 0; j < 10; j++) {
                 StoreOrder order = new StoreOrder();
                 order.setOrderDetails("Order_" + j + "_for_User_" + i);
                 order.setUser(user);
@@ -54,11 +68,13 @@ class MainBenchmark {
 
         long start = System.currentTimeMillis();
         List<User> fetchedUsers = userDAO.findAll();
-        // for (User u : fetchedUsers) {
-        //     if (u.getStoreOrders() != null) {
-        //         u.getStoreOrders().size();
-        //     }
-        // }
+        for (User u : fetchedUsers) {
+            u.getStoreOrders().size(); // trigger LAZY or EAGER
+            u.getFavoriteProducts().size();
+            if (u.getAddress() != null) {
+                u.getAddress().getCity();
+            }
+        }
         long end = System.currentTimeMillis();
         System.out.println("Time taken: " + (end - start) + " ms");
 
