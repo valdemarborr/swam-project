@@ -1,9 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 public class Category {
@@ -13,11 +11,18 @@ public class Category {
 
     private String name;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @ManyToOne
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
     private List<Category> subcategories;
 
-    // Getters and setters
 }

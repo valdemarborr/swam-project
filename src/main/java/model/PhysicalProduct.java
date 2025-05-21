@@ -1,14 +1,25 @@
 package model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Set;
+
 
 
 @Entity
 public class PhysicalProduct extends Product {
     private double weight;
     private String dimensions;
-    // Getters and setters
+
+    public double getWeight() {
+        return weight;
+    }
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public String getDimensions() {
+        return dimensions;
+    }
+    public void setDimensions(String dimensions) {
+        this.dimensions = dimensions;
+    }
 }
