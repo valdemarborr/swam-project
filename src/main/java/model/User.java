@@ -25,6 +25,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ShoppingCartItem> cartItems;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StoreOrder> storeOrders;
+
     @ManyToMany
     @JoinTable(name = "user_favorites",
         joinColumns = @JoinColumn(name = "user_id"),
@@ -94,6 +97,13 @@ public class User {
         return name;
     }
 
+    public List<StoreOrder> getStoreOrders() {
+        return this.storeOrders;
+    }
+
+    public void setStoreOrders(List<StoreOrder> storeOrders) {
+        this.storeOrders = storeOrders;
+    }
 
 
 
