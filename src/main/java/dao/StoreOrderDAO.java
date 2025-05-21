@@ -4,8 +4,8 @@ import jakarta.enterprise.context.RequestScoped;
 import model.StoreOrder;
 
 @RequestScoped
-public class StoreOrderDAO extends BaseDAO<StoreOrder> {
+public class StoreOrderDAO extends BaseDAO<model.StoreOrder> {
     public StoreOrderDAO() {
-        super(StoreOrder.class);
+        super(model.StoreOrder.class);
     }
 }

@@ -5,24 +5,19 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-
 @Entity
-public class StoreOrder {
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Category parent;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderLine> items;
-
-    @Embedded
-    private PaymentInfo paymentInfo;
+    @OneToMany(mappedBy = "parent")
+    private List<Category> subcategories;
 
     // Getters and setters
 }
