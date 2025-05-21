@@ -30,30 +30,77 @@ public class User {
         inverseJoinColumns = @JoinColumn(name = "product_id"))
     private Set<Product> favoriteProducts;
 
-    public void setName(String string) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setName'");
+    // Getters and setters
+
+    public List<ShoppingCartItem> getCartItems() {
+        return cartItems;
     }
 
-    public void setAddress(Address address2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setAddress'");
+    public void setCartItems(List<ShoppingCartItem> cartItems) {
+        this.cartItems = cartItems;
     }
-
     public Long getId() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getId'");
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+
+    }
+    public List<StoreOrder> getOrders() {
+        return orders;
+    }
+    public void setOrders(List<StoreOrder> orders) {
+        this.orders = orders;
+    }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    public Address getAddress() {
+        return address;
+    }
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+    public Set<Product> getFavoriteProducts() {
+        return favoriteProducts;
+    }
+    public void setFavoriteProducts(Set<Product> favoriteProducts) {
+        this.favoriteProducts = favoriteProducts;
+    }
+    
+    private String name;
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+        return name;
     }
 
-    public Object getStoreOrders() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getStoreOrders'");
+    private List<StoreOrder> storeOrders;
+
+    public List<StoreOrder> getStoreOrders() {
+        return storeOrders;
     }
 
-    // Getters and setters
+    public void setStoreOrders(List<StoreOrder> storeOrders) {
+        this.storeOrders = storeOrders;
+    }
+
 }
