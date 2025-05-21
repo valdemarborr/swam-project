@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-
+@Entity
 public class OrderLine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,5 +47,11 @@ public class OrderLine {
     public void setOrder(StoreOrder order) {
         this.order = order;
     }
+
+    public OrderLine(Product product, int quantity) {
+    this.product = product;
+    this.quantity = quantity;
+    }
+    public OrderLine() {}
     
 }

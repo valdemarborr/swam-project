@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "app_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,14 +94,8 @@ public class User {
         return name;
     }
 
-    private List<StoreOrder> storeOrders;
 
-    public List<StoreOrder> getStoreOrders() {
-        return storeOrders;
-    }
 
-    public void setStoreOrders(List<StoreOrder> storeOrders) {
-        this.storeOrders = storeOrders;
-    }
+
 
 }

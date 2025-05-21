@@ -48,7 +48,6 @@ public class UserDAOTest {
         Address address = new Address();
         address.setCity("TestCity");
         address.setStreet("TestStreet");
-        address.setZipcode("12345");
         user.setAddress(address);
 
         userDAO.save(user);
