@@ -11,7 +11,7 @@ public class StoreOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String OrderDetails;
     private String status;
 
     @ManyToOne
@@ -24,20 +24,51 @@ public class StoreOrder {
     @Embedded
     private PaymentInfo paymentInfo;
 
-    public void setUser(User user2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setUser'");
-    }
-
-    public void setItem(Item item) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setItem'");
-    }
-
-    public void setOrderDetails(String string) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setOrderDetails'");
-    }
-
     // Getters and setters
+
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    public User getUser() {
+        return user;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public List<OrderLine> getItem() {
+        return items;
+    }
+    public void setItem(Item item) {
+        this.items = (List<OrderLine>) item;
+    }
+    public PaymentInfo getPaymentInfo() {
+        return paymentInfo;
+    }
+    public void setPaymentInfo(PaymentInfo paymentInfo) {
+        this.paymentInfo = paymentInfo;
+    }
+    public String getOrderDetails() {
+        return OrderDetails;
+    }   
+    public void setOrderDetails(String orderDetails) {
+        OrderDetails = orderDetails;
+    }
+
+    public List<OrderLine> getItems() {
+        return items;
+    }
+
+    public void setItems(List<OrderLine> items) {
+        this.items = items;
+    }
+        
 }
