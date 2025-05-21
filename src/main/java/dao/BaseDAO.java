@@ -1,21 +1,19 @@
 package dao;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import java.util.List;
 
 public abstract class BaseDAO<T> {
     @Inject
-    public EntityManager entityManager;
+    protected EntityManager entityManager;
 
     private final Class<T> entityClass;
 
     public BaseDAO(Class<T> entityClass) {
         this.entityClass = entityClass;
-    }
-
-    public void save(T entity) {
-        entityManager.persist(entity);
     }
 
     public T findById(Long id) {
@@ -26,7 +24,18 @@ public abstract class BaseDAO<T> {
         return entityManager.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass).getResultList();
     }
 
-    public void delete(T entity) {
-        entityManager.remove(entity);
+    @Transactional
+    public void save(T entity) {
+        entityManager.persist(entity);
     }
-}
+
+    @Transactional
+    public void update(T entity) {
+        entityManager.merge(entity);
+    }
+
+    @Transactional
+    public void delete(T entity) {
+        entityManager.remove(entityManager.merge(entity));
+    }
+} 

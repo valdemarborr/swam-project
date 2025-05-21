@@ -1,36 +1,34 @@
 package model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String username;
+    private String password;
+    private String email;
 
     @Embedded
     private Address address;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StoreOrder> storeOrders;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StoreOrder> orders;
 
-    // @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    // private List<StoreOrder> storeOrders;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ShoppingCartItem> cartItems;
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    @ManyToMany
+    @JoinTable(name = "user_favorites",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "product_id"))
+    private Set<Product> favoriteProducts;
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public Address getAddress() { return address; }
-    public void setAddress(Address address) { this.address = address; }
-
-    public List<StoreOrder> getStoreOrders() { return storeOrders; }
-    public void setStoreOrders(List<StoreOrder> storeOrders) { this.storeOrders = storeOrders; }
+    // Getters and setters
 }
