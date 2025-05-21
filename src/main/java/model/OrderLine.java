@@ -1,9 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Set;
+
 
 @Entity
 public class OrderLine {
@@ -21,7 +19,6 @@ public class OrderLine {
     @JoinColumn(name = "order_id")
     private StoreOrder order;
 
-    // Getters and setters
 
     public Long getId() {
         return id;
