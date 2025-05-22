@@ -14,8 +14,8 @@ public class User {
     private String username;
     private String password;
     private String email;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "address_id")
     private Address address;
 

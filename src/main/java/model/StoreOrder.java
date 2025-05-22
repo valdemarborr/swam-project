@@ -19,7 +19,7 @@ public class StoreOrder {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderLine> products;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "payment_info_id")
     private PaymentInfo paymentInfo;
 
