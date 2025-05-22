@@ -16,11 +16,7 @@ public class User {
     private String email;
     private String name;
 
-    // === Embedded or OneToOne ===
     @Embedded
-    //@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    //@JoinColumn(name = "address_id")
-    // @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // Bytt for testing
     private Address address;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)

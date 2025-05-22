@@ -32,7 +32,6 @@ public class OrderService {
             OrderLine line = new OrderLine();
             line.setProduct(cartItem.getProduct());
             line.setQuantity(cartItem.getQuantity());
-            line.setOrder(order);
             order.getProducts().add(line);
             shoppingCartItemDAO.delete(cartItem);
         }

@@ -16,7 +16,8 @@ public class StoreOrder {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.EAGER) // eller LAZY hvis du ønsker det
+    @CollectionTable(name = "order_lines", joinColumns = @JoinColumn(name = "order_id"))
     private List<OrderLine> products;
 
     @Embedded
