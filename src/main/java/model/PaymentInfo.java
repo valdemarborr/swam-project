@@ -3,8 +3,9 @@ package model;
 import jakarta.persistence.*;
 
 
-@Embeddable
+@Entity
 public class PaymentInfo {
+    @Id
     private String cardNumber;
     private String cardHolder;
     private String expirationDate;
