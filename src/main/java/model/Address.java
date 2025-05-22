@@ -2,11 +2,8 @@ package model;
 
 import jakarta.persistence.*;
 
-@Entity
+@Embeddable
 public class Address {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     private String street;
     private String city;
@@ -14,8 +11,6 @@ public class Address {
     private String country;
 
     // Getters and setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
     public String getStreet() { return street; }
     public void setStreet(String street) { this.street = street; }
