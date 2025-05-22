@@ -2,7 +2,10 @@ package model;
 
 import jakarta.persistence.*;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> cf151856756438fd081fb724f3b94345bf615320
 @Entity
 public class PaymentInfo {
     @Id

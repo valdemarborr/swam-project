@@ -94,6 +94,7 @@ public class Main {
         }
 
         em.getTransaction().commit();
+<<<<<<< HEAD
                 long start = System.currentTimeMillis();
         List<User> fetchedUsers = userDAO.findAll();
         for (User u : fetchedUsers) {
@@ -105,6 +106,8 @@ public class Main {
         }
         long end = System.currentTimeMillis();
         System.out.println("Time taken: " + (end - start) + " ms");
+=======
+>>>>>>> cf151856756438fd081fb724f3b94345bf615320
         em.close();
         emf.close();
     }
