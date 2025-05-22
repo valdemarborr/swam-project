@@ -4,12 +4,26 @@ import dao.*;
 import model.*;
 import util.EntityManagerProducer;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-
+import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+
+/**
+ * Main.java
+ *
+ * Denne klassen simulerer en intensiv lagrings- og relasjonsoppbygging i databasen.
+ * Den oppretter 10 000 brukere. Hver bruker får 10 000 produkter (DigitalProduct eller PhysicalProduct)
+ * som legges i handlekurven (ShoppingCartItem). I tillegg genereres en ordre (StoreOrder) per bruker
+ * med 5 produkter.
+ *
+ * Målet er å generere høy datamengde og mye databaseaktivitet for å kunne studere
+ * ytelseseffekter av ulike JPA-mappingstrategier (f.eks. LAZY vs EAGER, @Embedded typer).
+ *
+ * Nyttig for: å bruke VisualVM for å observere minnebruk, GC, database-load og CPU-belastning.
+ */
+
 public class Main {
     public static void main(String[] args) {
         EntityManagerFactory emf = new EntityManagerProducer().produceEntityManagerFactory();
@@ -25,47 +39,61 @@ public class Main {
 
         em.getTransaction().begin();
 
-        Product product = new DigitalProduct();
-        product.setName("Laptop");
-        product.setPrice(new BigDecimal("999.99"));
-        productDAO.save(product);
+        for (int i = 0; i < 1000; i++) {
+            User user = new User();
+            user.setName("User_" + i);
+            Address address = new Address();
+            address.setCity("City_" + i);
+            address.setStreet("Street_" + i);
+            address.setZipCode("ZIP_" + i);
+            user.setAddress(address);
+            userDAO.save(user);
 
-        User user = new User();
-        user.setName("Valdemar");
-        Address address = new Address();
-        address.setCity("Firenze");
-        address.setStreet("Via Roma");
-        address.setZipCode("50100");
-        user.setAddress(address);
-        userDAO.save(user);
-        em.flush();
+            List<Product> userProducts = new ArrayList<>();
 
-        for (int j = 0; j < 1000000; j++) {
-            ShoppingCartItem item = new ShoppingCartItem();
-            item.setProduct(product);
-            item.setQuantity(1);
-            item.setUser(user);
+            for (int j = 0; j < 100; j++) {
+                Product product;
+                if (j % 2 == 0) {
+                    product = new DigitalProduct();
+                } else {
+                    product = new PhysicalProduct();
+                }
+                product.setName("Product_" + i + "_" + j);
+                product.setPrice(new BigDecimal("19.99"));
+                productDAO.save(product);
+                userProducts.add(product);
 
-            em.persist(item);
+                ShoppingCartItem item = new ShoppingCartItem();
+                item.setProduct(product);
+                item.setQuantity(1);
+                item.setUser(user);
+                em.persist(item);
 
-            // Flush og clear med jevne mellomrom for å unngå OutOfMemoryError
-            if (j % 100 == 0) {
+                if (j % 100 == 0) {
+                    em.flush();
+                    em.clear();
+                }
+            }
+
+            List<OrderLine> orderLines = new ArrayList<>();
+            for (int k = 0; k < 5 && k < userProducts.size(); k++) {
+                orderLines.add(new OrderLine(userProducts.get(k), 2));
+            }
+
+            StoreOrder order = new StoreOrder();
+            order.setUser(user);
+            order.setProducts(orderLines);
+            order.setOrderDetails("Express shipping for user " + i);
+            storeOrderDAO.save(order);
+
+            if (i % 100 == 0) {
+                System.out.println("Processed user " + i);
                 em.flush();
                 em.clear();
             }
         }
 
-
-        StoreOrder order = new StoreOrder();
-        order.setUser(user);
-        order.setProducts(List.of(new OrderLine(product, 1)));
-        order.setOrderDetails("Express shipping");
-        storeOrderDAO.save(order);
-
         em.getTransaction().commit();
-
-        System.out.println("User hentet: " + userDAO.findById(user.getId()).getName());
-
         em.close();
         emf.close();
     }
