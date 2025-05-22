@@ -40,7 +40,7 @@ public class Main {
         userDAO.save(user);
         em.flush();
 
-        for (int j = 0; j < 10000; j++) {
+        for (int j = 0; j < 1000000; j++) {
             ShoppingCartItem item = new ShoppingCartItem();
             item.setProduct(product);
             item.setQuantity(1);

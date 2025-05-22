@@ -5,8 +5,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
-@Embeddable
+@Entity
 public class PaymentInfo {
+    @Id
     private String cardNumber;
     private String cardHolder;
     private String expirationDate;

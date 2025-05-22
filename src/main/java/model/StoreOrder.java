@@ -21,7 +21,8 @@ public class StoreOrder {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderLine> products;
 
-    @Embedded
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "payment_info_id")
     private PaymentInfo paymentInfo;
 
     // Getters and setters

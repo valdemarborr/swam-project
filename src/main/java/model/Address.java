@@ -1,9 +1,12 @@
 package model;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
-@Embeddable
+@Entity
 public class Address {
+    @Id
     private String street;
     private String city;
     private String zipCode;
