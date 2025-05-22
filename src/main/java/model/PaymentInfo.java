@@ -1,15 +1,14 @@
 package model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embeddable;
 
-@Entity
+@Embeddable
 public class PaymentInfo {
-    @Id
     private String cardNumber;
     private String cardHolder;
     private String expirationDate;
     private String cvv;
-    
+
     public String getCardNumber() {
         return cardNumber;
     }

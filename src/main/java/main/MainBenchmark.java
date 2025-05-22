@@ -66,18 +66,6 @@ class MainBenchmark {
 
         em.getTransaction().commit();
 
-        long start = System.currentTimeMillis();
-        List<User> fetchedUsers = userDAO.findAll();
-        for (User u : fetchedUsers) {
-            u.getStoreOrders().size(); // trigger LAZY or EAGER
-            u.getFavoriteProducts().size();
-            if (u.getAddress() != null) {
-                u.getAddress().getCity();
-            }
-        }
-        long end = System.currentTimeMillis();
-        System.out.println("Time taken: " + (end - start) + " ms");
-
         em.close();
         emf.close();
     }
