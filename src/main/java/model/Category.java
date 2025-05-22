@@ -11,6 +11,16 @@ public class Category {
 
     private String name;
 
+
+    @OneToMany(mappedBy = "category")
+    private List<Product> products; 
+
+    @ManyToOne
+    private Category parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Category> subcategories;
+
     public String getName() {
         return name;
     }
@@ -18,11 +28,5 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
-
-    @ManyToOne
-    private Category parent;
-
-    @OneToMany(mappedBy = "parent")
-    private List<Category> subcategories;
 
 }

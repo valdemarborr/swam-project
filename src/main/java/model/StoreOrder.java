@@ -14,7 +14,7 @@ public class StoreOrder {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User buyer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderLine> products;
@@ -36,11 +36,11 @@ public class StoreOrder {
     public void setStatus(String status) {
         this.status = status;
     }
-    public User getUser() {
-        return user;
+    public User getBuyer() {
+        return buyer;
     }
     public void setUser(User user) {
-        this.user = user;
+        this.buyer = user;
     }
     public List<OrderLine> getProducts() {
         return products;
