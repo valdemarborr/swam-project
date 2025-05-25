@@ -26,6 +26,8 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+
+        long fetchStart = System.currentTimeMillis(); // Start tidtaking
         EntityManagerFactory emf = new EntityManagerProducer().produceEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
 
@@ -93,12 +95,8 @@ public class Main {
             }
         }
 
-        em.getTransaction().commit();
-
-        // Starter en ny transaksjon for å måle ytelsen på henting (fetching)
-        em.getTransaction().begin();
-        long fetchStart = System.currentTimeMillis(); // Start tidtaking
         int fetchRuns = 50; // Antall ganger loopen kjøres for å forsterke effekt
+        long fetch = System.currentTimeMillis(); // Start tidtaking
 
         for (int run = 0; run < fetchRuns; run++) {
 
@@ -109,37 +107,40 @@ public class Main {
 
                 // Tilgang til adressefeltet (enten @Embedded eller @OneToOne)
                 // Trigger en eventuell LAZY lasting dersom OneToOne
-                if (user.getAddress() != null) {
-                    user.getAddress().getCity(); // Leser et felt for å sikre lasting
-                }
+                // if (user.getAddress() != null) {
+                //     user.getAddress().getCity(); // Leser et felt for å sikre lasting
+                // }
 
-                // Hent alle handlekurv-elementer knyttet til brukeren
-                // Ved LAZY må det faktisk itereres for at de skal hentes
-                List<ShoppingCartItem> cartItems = user.getCartItems();
-                for (ShoppingCartItem item : cartItems) {
-                    Product product = item.getProduct(); // Hent produkt for hvert handlekurv-element
-                    if (product != null) {
-                        product.getName(); // Trigger lasting av produktinfo
-                    }
-                }
+                // // Hent alle handlekurv-elementer knyttet til brukeren
+                // // Ved LAZY må det faktisk itereres for at de skal hentes
+                // List<ShoppingCartItem> cartItems = user.getCartItems();
+                // for (ShoppingCartItem item : cartItems) {
+                //     Product product = item.getProduct(); // Hent produkt for hvert handlekurv-element
+                //     if (product != null) {
+                //         product.getName(); // Trigger lasting av produktinfo
+                //     }
+                // }
 
-                // Hent alle ordrer knyttet til brukeren
-                List<StoreOrder> orders = user.getOrders();
-                for (StoreOrder order : orders) {
-                    List<OrderLine> lines = order.getProducts(); // Hent ordrelinjer
-                    for (OrderLine line : lines) {
-                        Product product = line.getProduct(); // Hent produkt i ordrelinjen
-                        if (product != null) {
-                            product.getName(); // Trigger fetching av produktet
-                        }
-                    }
-                }
+                // // Hent alle ordrer knyttet til brukeren
+                // List<StoreOrder> orders = user.getOrders();
+                // for (StoreOrder order : orders) {
+                //     List<OrderLine> lines = order.getProducts(); // Hent ordrelinjer
+                //     for (OrderLine line : lines) {
+                //         Product product = line.getProduct(); // Hent produkt i ordrelinjen
+                //         if (product != null) {
+                //             product.getName(); // Trigger fetching av produktet
+                //         }
+                //     }
+                // }
             }
         }
 
         long fetchEnd = System.currentTimeMillis(); // Slutt tidtaking
-        System.out.println("FETCH LOOP ran " + fetchRuns + " times in " + (fetchEnd - fetchStart) + " ms");
+        System.out.println("Complete runtime with " + fetchRuns + " fetchloops: " + (fetchEnd - fetchStart) + " ms");
 
+        long fetch1 = System.currentTimeMillis(); // Slutt tidtaking
+        System.out.println("Runtime of " + fetchRuns + " fetchloops only: " + (fetch1 - fetch) + " ms");
+        // Ferdig med transaksjonen
         // Ferdig med transaksjonen
         em.getTransaction().commit();
 
