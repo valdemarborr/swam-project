@@ -10,6 +10,14 @@ public class Address {
     private String zipCode;
     private String country;
 
+    public Address() {    }
+
+    public Address(String city, String street, String zipCode) {
+        this.city = city;
+        this.street = street;
+        this.zipCode = zipCode;
+    }
+
     // Getters and setters
 
     public String getStreet() { return street; }
