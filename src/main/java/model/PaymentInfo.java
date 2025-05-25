@@ -1,7 +1,6 @@
 package model;
 
-import jakarta.persistence.*;
-
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class PaymentInfo {
@@ -9,7 +8,7 @@ public class PaymentInfo {
     private String cardHolder;
     private String expirationDate;
     private String cvv;
-    
+
     public String getCardNumber() {
         return cardNumber;
     }
