@@ -41,7 +41,7 @@ public class Main {
 
         em.getTransaction().begin();
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             User user = new User();
             user.setName("User_" + i);
             Address address = new Address();
@@ -95,7 +95,7 @@ public class Main {
             }
         }
 
-        int fetchRuns = 50; // Antall ganger loopen kjøres for å forsterke effekt
+        int fetchRuns = 1; // Antall ganger loopen kjøres for å forsterke effekt
         long fetch = System.currentTimeMillis(); // Start tidtaking
 
         for (int run = 0; run < fetchRuns; run++) {
@@ -107,31 +107,31 @@ public class Main {
 
                 // Tilgang til adressefeltet (enten @Embedded eller @OneToOne)
                 // Trigger en eventuell LAZY lasting dersom OneToOne
-                // if (user.getAddress() != null) {
-                //     user.getAddress().getCity(); // Leser et felt for å sikre lasting
-                // }
+                if (user.getAddress() != null) {
+                    user.getAddress().getCity(); // Leser et felt for å sikre lasting
+                }
 
                 // // Hent alle handlekurv-elementer knyttet til brukeren
                 // // Ved LAZY må det faktisk itereres for at de skal hentes
-                // List<ShoppingCartItem> cartItems = user.getCartItems();
-                // for (ShoppingCartItem item : cartItems) {
-                //     Product product = item.getProduct(); // Hent produkt for hvert handlekurv-element
-                //     if (product != null) {
-                //         product.getName(); // Trigger lasting av produktinfo
-                //     }
-                // }
+                List<ShoppingCartItem> cartItems = user.getCartItems();
+                for (ShoppingCartItem item : cartItems) {
+                    Product product = item.getProduct(); // Hent produkt for hvert handlekurv-element
+                    if (product != null) {
+                        product.getName(); // Trigger lasting av produktinfo
+                    }
+                }
 
                 // // Hent alle ordrer knyttet til brukeren
-                // List<StoreOrder> orders = user.getOrders();
-                // for (StoreOrder order : orders) {
-                //     List<OrderLine> lines = order.getProducts(); // Hent ordrelinjer
-                //     for (OrderLine line : lines) {
-                //         Product product = line.getProduct(); // Hent produkt i ordrelinjen
-                //         if (product != null) {
-                //             product.getName(); // Trigger fetching av produktet
-                //         }
-                //     }
-                // }
+                List<StoreOrder> orders = user.getOrders();
+                for (StoreOrder order : orders) {
+                    List<OrderLine> lines = order.getProducts(); // Hent ordrelinjer
+                    for (OrderLine line : lines) {
+                        Product product = line.getProduct(); // Hent produkt i ordrelinjen
+                        if (product != null) {
+                            product.getName(); // Trigger fetching av produktet
+                        }
+                    }
+                }
             }
         }
 
