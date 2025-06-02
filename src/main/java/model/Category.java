@@ -12,10 +12,10 @@ public class Category {
     private String name;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER)
     private List<Category> subcategories;
 
     public String getName() {
