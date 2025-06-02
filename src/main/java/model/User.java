@@ -1,8 +1,7 @@
 package model;
 
 import jakarta.persistence.*;
-import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "app_user")
@@ -23,17 +22,6 @@ public class User {
     // @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // Bytt for testing
     private Address address;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<StoreOrder> orders;
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<ShoppingCartItem> cartItems;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_favorites",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private Set<Product> favoriteProducts;
 
     // Getters and Setters
 
@@ -55,12 +43,4 @@ public class User {
     public Address getAddress() { return address; }
     public void setAddress(Address address) { this.address = address; }
 
-    public List<StoreOrder> getOrders() { return orders; }
-    public void setOrders(List<StoreOrder> orders) { this.orders = orders; }
-
-    public List<ShoppingCartItem> getCartItems() { return cartItems; }
-    public void setCartItems(List<ShoppingCartItem> cartItems) { this.cartItems = cartItems; }
-
-    public Set<Product> getFavoriteProducts() { return favoriteProducts; }
-    public void setFavoriteProducts(Set<Product> favoriteProducts) { this.favoriteProducts = favoriteProducts; }
 }

@@ -19,6 +19,7 @@ public class CartService {
     @Inject
     UserDAO userDAO;
 
+
     @Transactional
     public void addToCart(Long userId, Long productId, int quantity) {
         User user = userDAO.findById(userId);
@@ -32,7 +33,6 @@ public class CartService {
     }
 
     public List<ShoppingCartItem> getUserCart(Long userId) {
-        User user = userDAO.findById(userId);
-        return user.getCartItems();
+        return shoppingCartItemDAO.findByUserId(userId);
     }
 }

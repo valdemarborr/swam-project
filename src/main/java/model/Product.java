@@ -17,8 +17,6 @@ public abstract class Product {
     private String description;
     private BigDecimal price;
 
-    @ManyToOne
-    private Category category;
 
     // Getters and setters
     public Long getId() {

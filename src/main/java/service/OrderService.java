@@ -27,7 +27,7 @@ public class OrderService {
         order.setStatus("CONFIRMED");
         order.setPaymentInfo(paymentInfo);
 
-        List<ShoppingCartItem> cartItems = user.getCartItems();
+        List<ShoppingCartItem> cartItems = shoppingCartItemDAO.findByUserId(userId);
         for (ShoppingCartItem cartItem : cartItems) {
             OrderLine line = new OrderLine();
             line.setProduct(cartItem.getProduct());
@@ -41,7 +41,6 @@ public class OrderService {
     }
 
     public List<StoreOrder> getOrdersByUser(Long userId) {
-        User user = userDAO.findById(userId);
-        return user.getOrders();
+        return storeOrderDAO.findByUserId(userId);
     }
 }
