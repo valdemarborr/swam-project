@@ -6,7 +6,6 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import model.*;
 
-import java.util.List;
 
 @RequestScoped
 public class CartService {
@@ -32,7 +31,4 @@ public class CartService {
         shoppingCartItemDAO.save(item);
     }
 
-    public List<ShoppingCartItem> getUserCart(Long userId) {
-        return shoppingCartItemDAO.findByUserId(userId);
-    }
 }
