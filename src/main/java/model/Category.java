@@ -15,7 +15,7 @@ public class Category {
     @ManyToOne
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
     private List<Category> subcategories;
 
     public String getName() {
