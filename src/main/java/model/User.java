@@ -16,10 +16,10 @@ public class User {
     private String name;
 
     // === Embedded or OneToOne ===
-    @Embedded
+    //@Embedded
     //@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    //@JoinColumn(name = "address_id")
-    // @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // Bytt for testing
+    @JoinColumn(name = "address_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // Bytt for testing
     private Address address;
 
 

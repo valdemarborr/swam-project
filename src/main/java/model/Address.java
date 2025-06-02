@@ -2,8 +2,12 @@ package model;
 
 import jakarta.persistence.*;
 
-@Embeddable
+@Entity
+@Table(name = "app_address")
 public class Address {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String street;
     private String city;
